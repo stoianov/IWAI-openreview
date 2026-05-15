@@ -133,7 +133,7 @@ def write_to(TO,SBJ,MSG):
     T=client.post_message(recipients=TO,signature=c.usr, invitation=MSG_INVITATION, subject=SBJ, message=MSG)
     print(T)
 
-def send_certificates():
+def send_certificates_of_attendance():
     LIST = "xxxx.xlsx"
     SBJ = f"{VENUE} - Certificate of Attendance"
     MSG = """Dear {name},
@@ -154,6 +154,24 @@ def send_certificates():
         client.post_message(recipients=[email], subject=SBJ, message=msg, invitation=MSG_INVITATION, signature=c.usr)
         time.sleep(0.5)
 
+def send_invitation_to_contribute():
+    #LIST = os.path.join("2025","IWAI2025-Participants.xlsx")
+    LIST = os.path.join("2025","test-list.xlsx")
+    import messages.invitation_to_contribute as msg
+    df = pd.read_excel(LIST)
+    sent=0
+    for _, row in df.iterrows():
+        name, email = row.get("Name","colleague"), row.get("Email")
+        if not email:
+            continue
+        try:
+            client.post_message(recipients=[email.strip()], signature=c.usr, subject=msg.SBJ, message=msg.MSG.format(name=name), invitation=MSG_INVITATION)
+            sent +=1
+            time.sleep(0.5)
+        except Exception as e:
+            print(f"Failed for {email}: {e}")
+    print(f"Message send to {sent}")
+
 
 if __name__ == '__main__':
 
@@ -166,8 +184,10 @@ if __name__ == '__main__':
     # ---------  MESSAGING  -----------
     #write_to_myself()
 
-    import messages.remind_reviewers as msg
-    write_to(TO=msg.TO,SBJ=msg.SBJ.format(VENUE=VENUE),MSG=msg.MSG.format(VENUE=VENUE))
+    # import messages.remind_reviewers as msg
+    # write_to(TO=msg.TO,SBJ=msg.SBJ.format(VENUE=VENUE),MSG=msg.MSG.format(VENUE=VENUE))
+
+    send_invitation_to_contribute()
 
 
 
