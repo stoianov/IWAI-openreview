@@ -183,11 +183,11 @@ if __name__ == '__main__':
 
     # ---------  MESSAGING  -----------
     #write_to_myself()
+    send_invitation_to_contribute()
 
     # import messages.remind_reviewers as msg
     # write_to(TO=msg.TO,SBJ=msg.SBJ.format(VENUE=VENUE),MSG=msg.MSG.format(VENUE=VENUE))
 
-    send_invitation_to_contribute()
 
 
 

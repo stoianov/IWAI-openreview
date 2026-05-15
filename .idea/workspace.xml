@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c1d9a590-aa62-421f-af21-68ba5e88f0c0" name="Changes" comment="improve monitor">
-      <change afterPath="$PROJECT_DIR$/messages/remind_reviewers.py" afterDir="false" />
+    <list default="true" id="c1d9a590-aa62-421f-af21-68ba5e88f0c0" name="Changes" comment="messaging">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -154,7 +152,31 @@
       <option name="project" value="LOCAL" />
       <updated>1778854494424</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="messaging">
+      <option name="closed" value="true" />
+      <created>1778859930483</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1778859930483</updated>
+    </task>
+    <task id="LOCAL-00012" summary="messaging">
+      <option name="closed" value="true" />
+      <created>1778860038628</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1778860038628</updated>
+    </task>
+    <task id="LOCAL-00013" summary="messaging">
+      <option name="closed" value="true" />
+      <created>1778864063805</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1778864063805</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -165,7 +187,8 @@
     <MESSAGE value="draft readme" />
     <MESSAGE value="small update" />
     <MESSAGE value="improve monitor" />
-    <option name="LAST_COMMIT_MESSAGE" value="improve monitor" />
+    <MESSAGE value="messaging" />
+    <option name="LAST_COMMIT_MESSAGE" value="messaging" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
