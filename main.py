@@ -44,7 +44,7 @@ def monitor():
         subm_id = s.number
         aid = s.content['authorids']['value']    # List of all authors id's
         Typ=s.content.get("type")
-        Strm=s.content.get("stream")
+        Strm=streams[int(s.content.get("stream")["value"][0])-1]
         typ = int(Typ["value"][0]) if not Typ==None else 1 # Fallback for previous IWAI editions without Type.
         typs = types[typ-1]
         tit = s.content['title']['value']
@@ -52,14 +52,14 @@ def monitor():
         # auth_prof = openreview.tools.get_profiles(client,aid)
         # auth[s.number]=ais
         if typ==1:
-            i_p+=1;   authP[s.number]=[i_p,f"#{subm_id}",Strm, tit, aid, kws]
+            i_p+=1;   authP[i_p]=[f"ID# {subm_id}", Strm, tit]
         else:
-            i_a+=1;   authA[s.number]=[i_a,f"#{subm_id}",Strm, tit, aid, kws]
+            i_a+=1;   authA[i_a]=[f"ID# {subm_id}", Strm, tit]
         pass
     print(f" ------------- {i_p} FULL PAPERS -------- ")
-    pprint.pprint(dict(sorted(authP.items())))
+    pprint.pprint(dict(sorted(authP.items())), width=140)
     print(f" ------------- {i_a} EXT ABSTRACTS -------- ")
-    pprint.pprint(dict(sorted(authA.items())))
+    pprint.pprint(dict(sorted(authA.items())), width=140)
     print(f" ----- TOTAL {i_p+i_a}:  {i_p} full papes and {i_a} ext abstracts -----")
 
 def submissions2xls():
@@ -133,6 +133,6 @@ TO DO:
 
 if __name__ == '__main__':
     #authors()  # List all author's IDs or emails.
-    #monitor()               # List all submissions (type,title,autor-IDs, keywords)
-    submissions2xls()
+    monitor()               # List all submissions (type,title,autor-IDs, keywords)
+    #submissions2xls()
     #download_pdf()  # Download submissions and store them in directories by type
