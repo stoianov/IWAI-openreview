@@ -27,7 +27,7 @@ types=['1-paper','2-abstr']
 
 submissions = client.get_all_notes(invitation=SUBMISSION_INVITATION, sort='number:asc', details='replies')
 
-def list_of_all_authors():
+def authors():
     author_ids = set()
     for paper in submissions:
         ids = paper.content.get('authorids', [])["value"]
@@ -62,7 +62,37 @@ def monitor():
     pprint.pprint(dict(sorted(authA.items())))
     print(f" ----- TOTAL {i_p+i_a}:  {i_p} full papes and {i_a} ext abstracts -----")
 
-def download_submissions():
+def submissions():
+    os.makedirs(YEAR, exist_ok=True)
+    xls_fname = f"{venue}-submission-abstracts.xlsx"
+    xls_fpath = os.path.join(YEAR,xls_fname)
+    data = {0:[],1:[]} # Submission types
+
+    for s in submissions:
+        ID = s.number
+        typ = int(s.content.get("type")["value"][0]) - 1
+        strm = int(s.content.get("stream")["value"][0]) - 1
+        stream = streams[strm]
+        authors = s.content.get("authors",[])["value"]
+        if isinstance(authors,list): authors=", ".join(authors)
+        has_pdf= "yes" if s.content.get("pdf") else "no"
+
+        data[typ].append({
+            "Stream": stream,
+                "ID#": ID,
+                "Title": s.content.get("title", "")["value"],
+                "Authors": authors,
+                "pdf": has_pdf,
+                "Abstract": s.content.get("abstract", "")["value"]
+            })
+    df0 = pd.DataFrame(data[0], columns=["Stream", "ID#", "Title", "Authors", "pdf", "Abstract"]).sort_values(by=["Stream", "ID#"])
+    df1 = pd.DataFrame(data[1], columns=["Stream", "ID#", "Title", "Authors", "pdf", "Abstract"]).sort_values(by=["Stream", "ID#"])
+    with pd.ExcelWriter(xls_fpath, engine="openpyxl") as writer:
+        df0.to_excel(writer, sheet_name=types[0], index=False)
+        df1.to_excel(writer, sheet_name=types[1], index=False)
+    print(f"Exported {len(df0)} full-paper submissions and {len(df1)} ext.abstr. submissions to {xls_fname}")
+
+def download_pdf():
     for s in submissions:
         pdf_field=s.content.get("pdf")
 
@@ -92,12 +122,11 @@ def download_submissions():
                     print(f"Failed {s.id}: {e}")
 
 
-# export
-
 # messaging
 
 
 if __name__ == '__main__':
-    #list_of_all_authors()  # List all author's IDs or emails.
+    #authors()  # List all author's IDs or emails.
     #monitor()               # List all submissions (type,title,autor-IDs, keywords)
-    download_submissions()  # Download submissions and store them in directories by type
+    submissions()
+    #download_pdf()  # Download submissions and store them in directories by type
