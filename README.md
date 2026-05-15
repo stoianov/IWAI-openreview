@@ -32,3 +32,6 @@ Export all submissions to an xls file, in separate sheets and ordered by stream
 
     - download_pdf()
 Download submissions and store them in directories by type
+
+    - write_to()
+Send a message to a list of emails/openreview-accounts. Se example in main.py
