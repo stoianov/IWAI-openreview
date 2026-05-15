@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c1d9a590-aa62-421f-af21-68ba5e88f0c0" name="Changes" comment="download pdfs">
+    <list default="true" id="c1d9a590-aa62-421f-af21-68ba5e88f0c0" name="Changes" comment="draft readme">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,13 +88,40 @@
       <option name="project" value="LOCAL" />
       <updated>1778848788977</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="pdf; submissions-to-xls">
+      <option name="closed" value="true" />
+      <created>1778851344016</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1778851344016</updated>
+    </task>
+    <task id="LOCAL-00004" summary="comment">
+      <option name="closed" value="true" />
+      <created>1778851488479</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1778851488479</updated>
+    </task>
+    <task id="LOCAL-00005" summary="draft readme">
+      <option name="closed" value="true" />
+      <created>1778852535599</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1778852535599</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="1st" />
     <MESSAGE value="download pdfs" />
-    <option name="LAST_COMMIT_MESSAGE" value="download pdfs" />
+    <MESSAGE value="pdf; submissions-to-xls" />
+    <MESSAGE value="comment" />
+    <MESSAGE value="draft readme" />
+    <option name="LAST_COMMIT_MESSAGE" value="draft readme" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

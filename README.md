@@ -4,7 +4,7 @@
 
 This is an official repository of python code used to access the submissions to the IWAI conference. 
 
-The purpose of the code is to support the Organization Committee in handling the submission and reviewing process.
+The purpose of the code is to support the Organization Committee in handling the submission and reviewing processes.
 
 The code inherits and extends code implemented earlier.
 
@@ -16,6 +16,6 @@ TO BE DONE:
 
 
 Instructions:
-- set the config.py with your openreview account info. Be careful not to share your access ..
+- set the *config.py* with your openreview account info. Be careful not to share your access information ..
 - install openreview library (e.g. with pip)
-- uncomment in main.py the function to be executed and run it
+- uncomment in *main.py* the function to be executed and run it
