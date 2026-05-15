@@ -8,7 +8,7 @@ import pprint
 # DEFINITIONS
 BASE_URL = 'https://api2.openreview.net'
 YEAR='2026'
-venue = f'IWAI{YEAR}'
+VENUE = f'IWAI-{YEAR}'
 venue_id    = f'IWAI/{YEAR}/Workshop'
 SUBMISSION_INVITATION = f'{venue_id}/-/Submission'
 ASSIGNMENT_INVITATION = f'{venue_id}/Reviewers/-/Assignment'
@@ -64,7 +64,7 @@ def monitor():
 
 def submissions2xls():
     os.makedirs(YEAR, exist_ok=True)
-    xls_fname = f"{venue}-submission-abstracts.xlsx"
+    xls_fname = f"{VENUE}-submission-abstracts.xlsx"
     xls_fpath = os.path.join(YEAR,xls_fname)
     data = {0:[],1:[]} # Submission types
 
@@ -124,15 +124,50 @@ def download_pdf():
                 except Exception as e:
                     print(f"Failed {s.id}: {e}")
 
-"""
+def write_to_myself():
+    T=client.post_message(recipients=[c.usr], signature=c.usr, invitation=MSG_INVITATION,
+                          subject='Test-OpenReview-Messaging', message="-- Test messaging --")
+    print(T)
 
-TO DO: 
- 1. messaging (to authors and potential authors)
+def write_to(TO,SBJ,MSG):
+    T=client.post_message(recipients=TO,signature=c.usr, invitation=MSG_INVITATION, subject=SBJ, message=MSG)
+    print(T)
 
-"""
+def send_certificates():
+    LIST = "xxxx.xlsx"
+    SBJ = f"{VENUE} - Certificate of Attendance"
+    MSG = """Dear {name},
+    Thank you for participating in {VENUE}. Please download your Certificate of Attendance here: {link}
+    Best regards,
+    The IWAI 2025 Organizing Committee
+    """
+    df = pd.read_excel(LIST)
+    for idx, row in df.iterrows():
+        name = row.get("Name")
+        email = row.get("Email")
+        cert_path = row.get("Certificate")
+        attachment = client.put_attachment(invitation=MSG_INVITATION, name=f"certificate_{name}",content=open(cert_path, 'rb'))
+        link = attachment['url']
+        time.sleep(0.5)
+        msg = MSG.format(name=name, link=link, VENUE=VENUE)
+        print(f"Try sending to {name} ({email})")
+        client.post_message(recipients=[email], subject=SBJ, message=msg, invitation=MSG_INVITATION, signature=c.usr)
+        time.sleep(0.5)
+
 
 if __name__ == '__main__':
+
+    # -- IWAI submissions INFORMATION --
     #authors()  # List all author's IDs or emails.
-    monitor()               # List all submissions (type,title,autor-IDs, keywords)
+    #monitor()               # List all submissions (type,title,autor-IDs, keywords)
     #submissions2xls()
     #download_pdf()  # Download submissions and store them in directories by type
+
+    # ---------  MESSAGING  -----------
+    #write_to_myself()
+
+    import messages.remind_reviewers as msg
+    write_to(TO=msg.TO,SBJ=msg.SBJ.format(VENUE=VENUE),MSG=msg.MSG.format(VENUE=VENUE))
+
+
+

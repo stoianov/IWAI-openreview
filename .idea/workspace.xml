@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c1d9a590-aa62-421f-af21-68ba5e88f0c0" name="Changes" comment="draft readme">
+    <list default="true" id="c1d9a590-aa62-421f-af21-68ba5e88f0c0" name="Changes" comment="improve monitor">
+      <change afterPath="$PROJECT_DIR$/messages/remind_reviewers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -34,7 +37,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Python.main.executor": "Debug",
+    "Python.main.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true"
   }
 }]]></component>
@@ -127,7 +130,31 @@
       <option name="project" value="LOCAL" />
       <updated>1778852863133</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="small update">
+      <option name="closed" value="true" />
+      <created>1778853728648</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1778853728648</updated>
+    </task>
+    <task id="LOCAL-00009" summary="small update">
+      <option name="closed" value="true" />
+      <created>1778853753849</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1778853753849</updated>
+    </task>
+    <task id="LOCAL-00010" summary="improve monitor">
+      <option name="closed" value="true" />
+      <created>1778854494424</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1778854494424</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -136,7 +163,9 @@
     <MESSAGE value="pdf; submissions-to-xls" />
     <MESSAGE value="comment" />
     <MESSAGE value="draft readme" />
-    <option name="LAST_COMMIT_MESSAGE" value="draft readme" />
+    <MESSAGE value="small update" />
+    <MESSAGE value="improve monitor" />
+    <option name="LAST_COMMIT_MESSAGE" value="improve monitor" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -27,7 +27,7 @@ List all author's IDs or emails.
     - monitor()             
 List all submissions (type,title,autor-IDs, keywords)
 
-    - submissions()
+    - submissions2xls()
 Export all submissions to an xls file, in separate sheets and ordered by stream
 
     - download_pdf()
