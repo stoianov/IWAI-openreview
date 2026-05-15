@@ -17,5 +17,18 @@ TO BE DONE:
 
 Instructions:
 - set the *config.py* with your openreview account info. Be careful not to share your access information ..
-- install openreview library (e.g. with pip)
+- install **openreview** library (e.g. with pip)
 - uncomment in *main.py* the function to be executed and run it
+
+### Functions
+    - authors()
+List all author's IDs or emails.
+
+    - monitor()             
+List all submissions (type,title,autor-IDs, keywords)
+
+    - submissions()
+Export all submissions to an xls file, in separate sheets and ordered by stream
+
+    - download_pdf()
+Download submissions and store them in directories by type
