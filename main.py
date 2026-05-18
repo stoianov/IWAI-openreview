@@ -155,7 +155,7 @@ def send_certificates_of_attendance():
         time.sleep(0.5)
 
 def send_invitation_to_contribute():
-    #LIST = os.path.join("2025","IWAI2025-Participants.xlsx")
+    # -- LIST = "IWAI-Participants.xlsx" -- MASTER LIST -- PAY ATTENTION WHEN USING IT
     LIST = os.path.join("2025","test-list.xlsx")
     import messages.invitation_to_contribute as msg
     df = pd.read_excel(LIST)
@@ -176,14 +176,15 @@ def send_invitation_to_contribute():
 if __name__ == '__main__':
 
     # -- IWAI submissions INFORMATION --
-    #authors()  # List all author's IDs or emails.
+    authors()  # List all author's IDs or emails.
     #monitor()               # List all submissions (type,title,autor-IDs, keywords)
     #submissions2xls()
     #download_pdf()  # Download submissions and store them in directories by type
 
     # ---------  MESSAGING  -----------
     #write_to_myself()
-    send_invitation_to_contribute()
+
+    #send_invitation_to_contribute()
 
     # import messages.remind_reviewers as msg
     # write_to(TO=msg.TO,SBJ=msg.SBJ.format(VENUE=VENUE),MSG=msg.MSG.format(VENUE=VENUE))
