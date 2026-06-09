@@ -34,32 +34,57 @@ def authors():
         for a_id in ids:
             if a_id and a_id != 'None':
                 author_ids.add(a_id)
-    print(f"Found {len(author_ids)} unique author IDs.")
     pprint.pprint(author_ids)
     print(f"Found {len(author_ids)} unique author IDs.")
+
+def authors_by_type(stype):
+    author_ids = set()
+    for paper in submissions:
+        ids = paper.content.get('authorids', [])["value"]
+        Typ=paper.content.get("type")
+        typ = int(Typ["value"][0])
+        if typ==stype:
+            for a_id in ids:
+                if a_id and a_id != 'None':
+                    author_ids.add(a_id)
+    pprint.pprint(author_ids)
+    print(f"Found {len(author_ids)} unique author IDs of type {types[stype-1]}.")
+
 
 def monitor():
     authP,authA = {},{}; i_p,i_a = 0,0
     for i,s in enumerate(submissions):
         subm_id = s.number
-        aid = s.content['authorids']['value']    # List of all authors id's
         Typ=s.content.get("type")
-        Strm=streams[int(s.content.get("stream")["value"][0])-1]
+        strm=s.content.get("stream")
+        Strm = streams[int(strm["value"][0])-1] if strm else ""
+
         typ = int(Typ["value"][0]) if not Typ==None else 1 # Fallback for previous IWAI editions without Type.
         typs = types[typ-1]
         tit = s.content['title']['value']
         kws = s.content['keywords']['value']
+        has_pdf = "pdf" if s.content.get("pdf") else "   "
+        authors = s.content.get("authors", [])["value"]
+        authorsid = s.content.get("authorids", [])["value"]
+        authid0 = authorsid[0]
+        if authid0.startswith("~"):
+            profile = client.get_profile(authid0)
+            email = profile.content.get("preferredEmail")
+        else:
+            email = authid0
+        email_domain=email[-9:]
+
         # auth_prof = openreview.tools.get_profiles(client,aid)
         # auth[s.number]=ais
         if typ==1:
-            i_p+=1;   authP[i_p]=[f"ID# {subm_id}", Strm, tit]
+            i_p+=1; authP[i_p]=[f"ID# {subm_id}", Strm, has_pdf, email_domain, authors[0], tit]
         else:
-            i_a+=1;   authA[i_a]=[f"ID# {subm_id}", Strm, tit]
+            i_a+=1; authA[i_a]=[f"ID# {subm_id}", Strm, has_pdf, email_domain, authors[0], tit]
         pass
     print(f" ------------- {i_p} FULL PAPERS -------- ")
-    pprint.pprint(dict(sorted(authP.items())), width=140)
+    pprint.pprint(dict(sorted(authP.items())), width=300)
     print(f" ------------- {i_a} EXT ABSTRACTS -------- ")
-    pprint.pprint(dict(sorted(authA.items())), width=140)
+    pprint.pprint(dict(sorted(authA.items())), width=300)
     print(f" ----- TOTAL {i_p+i_a}:  {i_p} full papes and {i_a} ext abstracts -----")
 
 def submissions2xls():
@@ -130,8 +155,11 @@ def write_to_myself():
     print(T)
 
 def write_to(TO,SBJ,MSG):
-    T=client.post_message(recipients=TO,signature=c.usr, invitation=MSG_INVITATION, subject=SBJ, message=MSG)
-    print(T)
+    try:
+        T=client.post_message(recipients=[TO],signature=c.usr, invitation=MSG_INVITATION, subject=SBJ, message=MSG)
+        print(T)
+    except Exception as e:
+        print(f"Failed sending message to {TO}: {e}")
 
 def send_certificates_of_attendance():
     LIST = "xxxx.xlsx"
@@ -155,8 +183,10 @@ def send_certificates_of_attendance():
         time.sleep(0.5)
 
 def send_invitation_to_contribute():
-    # -- LIST = "IWAI-Participants.xlsx" -- MASTER LIST -- PAY ATTENTION WHEN USING IT
-    LIST = os.path.join("2025","test-list.xlsx")
+    # -- LIST = os.path.join("Lists","IWAI-Participants3.xlsx") -- MASTER LIST -- PAY ATTENTION WHEN USING IT. IWAI 2024 and 2025, both authors and actual participants
+    # LIST = os.path.join("Lists","IWAI_Added.xlsx") # Non-participant Authors
+    LIST = os.path.join("Lists","IWAI_Unmatched2.xlsx") # Non-participant Authors; to
+    #LIST = os.path.join("2025","test-list.xlsx")
     import messages.invitation_to_contribute as msg
     df = pd.read_excel(LIST)
     sent=0
@@ -164,6 +194,17 @@ def send_invitation_to_contribute():
         name, email = row.get("Name","colleague"), row.get("Email")
         if not email:
             continue
+        # This just verifies if the profile is present. The message is then sent to the profile name, not to the email (which is kept partially hidden)
+        if email.startswith("~"):
+            try:
+                profile = client.get_profile(email)
+                Email = profile.content.get("preferredEmail")
+                print(f"{email} --> {Email}")
+            except Exception as e:
+                print(f"Cannot resolve {email}: {e}")
+                continue
+
+        # Send message to either email or profile-name (! profiles are case-sensitive !)
         try:
             client.post_message(recipients=[email.strip()], signature=c.usr, subject=msg.SBJ, message=msg.MSG.format(name=name), invitation=MSG_INVITATION)
             sent +=1
@@ -173,21 +214,30 @@ def send_invitation_to_contribute():
     print(f"Message send to {sent}")
 
 
-if __name__ == '__main__':
+def send_message_to_authors():
+    from Lists.authors2026 import AUTH_PAPER
+    import messages.extension_and_anonymization as msg
+    for auth in AUTH_PAPER:
+        write_to(TO=auth,SBJ=msg.SBJ.format(VENUE=VENUE),MSG=msg.MSG.format(VENUE=VENUE))
+        time.sleep(0.3)
 
+
+if __name__ == '__main__':
+    pass
     # -- IWAI submissions INFORMATION --
-    authors()  # List all author's IDs or emails.
+    # authors_by_type(2)  # List all author's IDs or emails.
     #monitor()               # List all submissions (type,title,autor-IDs, keywords)
     #submissions2xls()
     #download_pdf()  # Download submissions and store them in directories by type
 
     # ---------  MESSAGING  -----------
     #write_to_myself()
-
     #send_invitation_to_contribute()
 
     # import messages.remind_reviewers as msg
     # write_to(TO=msg.TO,SBJ=msg.SBJ.format(VENUE=VENUE),MSG=msg.MSG.format(VENUE=VENUE))
+
+    send_message_to_authors()
 
 
 

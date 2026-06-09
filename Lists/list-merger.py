@@ -30,5 +30,16 @@ def merge_email_lists(file1, file2, output_file):
     print(f"Merged list exported to: {output_file}")
     print(f"Total unique emails: {len(df)}")
 
+def list_merger():
+    from IWAI2024_Authors import LIST as L1
+    from IWAI2025_Authors import LIST as L2
+    L = sorted(set(L1 + L2))
+    print(L)
+    print(f"L1 {len(L1)} L2 {len(L2)} L1+L2 {len(L)} ")
+
+
+
+
 if __name__ == '__main__':
-    merge_email_lists("2025/IWAI2025-Participants.xlsx", "2024/IWAI2024-Participants.xlsx","IWAI-Participants.xlsx")
+    #merge_email_lists("2025/IWAI2025-Participants.xlsx", "2024/IWAI2024-Participants.xlsx","IWAI-Participants.xlsx")
+    list_merger()
