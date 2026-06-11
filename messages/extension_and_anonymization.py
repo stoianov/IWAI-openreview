@@ -15,5 +15,5 @@ We thank you for your cooperation.
 
 Kind regards,
 
-the {VENUE} Progam Chairs
+The {VENUE} Program Chairs
 """

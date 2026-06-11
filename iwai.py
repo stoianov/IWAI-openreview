@@ -11,6 +11,7 @@ YEAR='2026'
 VENUE = f'IWAI-{YEAR}'
 venue_id    = f'IWAI/{YEAR}/Workshop'
 SUBMISSION_INVITATION = f'{venue_id}/-/Submission'
+BL_SUBMISSION_INVITATION = f'{venue_id}/-/Blind_Submission'
 ASSIGNMENT_INVITATION = f'{venue_id}/Reviewers/-/Assignment'
 MSG_INVITATION=f'{venue_id}/-/Edit'
 REVIEWER_GROUP = f'{venue_id}/Reviewers'
@@ -27,15 +28,19 @@ types=['1-paper','2-abstr']
 
 submissions = client.get_all_notes(invitation=SUBMISSION_INVITATION, sort='number:asc', details='replies')
 
-def authors():
+def authors(print_list=False):
+    """ get all unique author IDs and either print the list or just return it """
     author_ids = set()
     for paper in submissions:
         ids = paper.content.get('authorids', [])["value"]
         for a_id in ids:
             if a_id and a_id != 'None':
                 author_ids.add(a_id)
-    pprint.pprint(author_ids)
-    print(f"Found {len(author_ids)} unique author IDs.")
+    if print_list:
+        pprint.pprint(author_ids)
+        print(f"Found {len(author_ids)} unique author IDs.")
+    else:
+        return author_ids
 
 def authors_by_type(stype):
     author_ids = set()
@@ -221,9 +226,117 @@ def send_message_to_authors():
         write_to(TO=auth,SBJ=msg.SBJ.format(VENUE=VENUE),MSG=msg.MSG.format(VENUE=VENUE))
         time.sleep(0.3)
 
+def add_reviewers(reviewer_ids):
+    """ Add reviewers to the venue's Reviewers group. reviewer_ids : list[str] of openreview profiles/emails """
+    group = client.get_group(REVIEWER_GROUP)
+    members = set(group.members)
+    new_members = members.union(set(reviewer_ids))
+    group.members = list(new_members)
+    client.post_group_edit( invitation=f"{venue_id}/-/Edit", readers=[venue_id], writers=[venue_id], signatures=[venue_id], group=group)
+    print(f"Reviewers group updated: {len(members)} -> {len(new_members)} members.")
+
+
+def X_lossy_reviewers1():
+    logs=client.get_process_logs(venue_id)
+    for l in logs:
+        print(l.id, l.status)
+    expertise = client.get_all_expertise(venue_id)
+    pass
+
+def X_reviewers_expertise():
+    #reviewers = client.get_group(REVIEWER_GROUP).members
+    response = client.request_expertise(name='venue-reviewers-affinity',
+                   group_id=REVIEWER_GROUP, venue_id=BL_SUBMISSION_INVITATION, model='specter2+scincl')
+    job_id = response['jobId']
+    print(f"Expertise job submitted successfully. Job ID: {job_id}")
+    n=0
+    while n<30:
+        n +=1
+        status_check = client.get_expertise_status(job_id=job_id)
+        status = status_check.get('status','').lower()
+        print(f"Current Job Status: {status}")
+        if status == 'completed': break
+        if status == 'error': raise RuntimeError("Expertise computation failed on OpenReview.")
+        time.sleep(30)  # Wait 30 seconds before polling again
+
+    results = client.get_expertise_results(job_id=job_id)
+    rows=[]
+    for reviewer, papers in results.get('results', {}).items():
+        if isinstance(papers, dict):
+            for paper, score in papers.items():
+                rows.append({"reviewer": reviewer, "paper": paper, "score": score})
+    df = pd.DataFrame(rows)
+    df.to_excel('expertise_results.xlsx', index=False)
+    print("Expertise exported to 'expertise_results.xlsx'")
+
+def lossy_reviewers():
+    reviewers = client.get_group(REVIEWER_GROUP).members
+    no_pub = []
+    for r in reviewers:
+        try:
+            profile = client.get_profile(r)
+            pubs = profile.content.get("publications", [])
+            dblp = profile.content.get("dblp", "") # also check DBLP / semantic scholar links if present
+            s2 = profile.content.get("semanticScholarId", "")
+            if (not pubs or len(pubs) == 0) and not dblp and not s2:
+                no_pub.append(r)
+        except Exception: no_pub.append(r)
+    print(len(no_pub))
+
+def compute_CoI():
+    response = client.request_expertise(name='venue_conflicts', group_id=REVIEWER_GROUP,  venue_id=venue_id,  alternate_match_group=None,  model=None)
+    job_id = response["jobId"]
+    while True:
+        status = client.get_expertise_status(job_id=job_id)
+        if status["status"].lower() == "completed":   break
+        if "error" in status["status"].lower():       raise RuntimeError(status)
+        time.sleep(10)
+    conflicts = client.get_expertise_results(job_id=job_id)
+
+def extract_field(content, key):
+    """  OpenReview V2 stores values as:  content[key]["value"] or content[key]  """
+    if key not in content:  return None
+    value = content[key]
+    if isinstance(value, dict) and "value" in value:
+        return value["value"]
+    return value
+
+def get_CoI():
+    global paper_conflicts; paper_conflicts = {}
+    """https://docs.openreview.net/how-to-guides/data-retrieval-and-modification/how-to-get-edges-for-conflicts-assignments-custom-max-papers-and-more"""
+    conflict_invitation = f"{venue_id}/Reviewers/-/Conflict"
+    grouped_edges = client.get_grouped_edges(invitation=conflict_invitation, groupby='head')
+    for group in grouped_edges:
+        paper_id = group['id']['head']
+        reviewers = { edge['tail'] if isinstance(edge,dict) else edge.tail for edge in group['values']}
+        paper_conflicts[paper_id]=reviewers
+
+    rows=[]
+    for note in submissions:
+        title = extract_field(note.content, "title")
+        authors = extract_field(note.content, "authors")
+        number = note.number
+        id     = note.id
+        cois   = paper_conflicts.get(id,set())
+        rows.append({
+            "paper_id": id,
+            "paper_number": number,
+            "title": title,
+            "authors": ", ".join(authors),
+            "CoIs": ", ".join(sorted(cois)) if cois else ""
+        })
+    df = pd.DataFrame(rows)
+    fname=f"{VENUE}_OpenReview_CoI.xlsx"
+    df.to_excel(fname, index=False)
+    print(f"Exported {len(df)} papers to '{fname}'.")
+
+def all_invitaions():
+    invitations = client.get_invitations(prefix=venue_id)
+    for inv in invitations:
+        if "Reviewer" in inv.id or "Conflict" in inv.id:
+            print(inv.id)
 
 if __name__ == '__main__':
-    pass
     # -- IWAI submissions INFORMATION --
     # authors_by_type(2)  # List all author's IDs or emails.
     #monitor()               # List all submissions (type,title,autor-IDs, keywords)
@@ -237,8 +350,14 @@ if __name__ == '__main__':
     # import messages.remind_reviewers as msg
     # write_to(TO=msg.TO,SBJ=msg.SBJ.format(VENUE=VENUE),MSG=msg.MSG.format(VENUE=VENUE))
 
-    send_message_to_authors()
+    #send_message_to_authors()
 
-
-
+    # --- Reviewers ----
+    #from Lists.IWAI2026_All_Reviewers import REVIEWERS
+    #add_reviewers(REVIEWERS)
+    #add_reviewers(authors())    # Add all authors as potential reviewers
+    #authors(print_list=True)
+    # lossy_reviewers()
+    get_CoI()
+    #all_invitaions()
 

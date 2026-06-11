@@ -4,15 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c1d9a590-aa62-421f-af21-68ba5e88f0c0" name="Changes" comment="messaging">
-      <change afterPath="$PROJECT_DIR$/.idea/csv-editor.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/2026/PROCEDURE.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/CoI.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/messages/extension_and_anonymization.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reviewer_selector.py" afterDir="false" />
+    <list default="true" id="c1d9a590-aa62-421f-af21-68ba5e88f0c0" name="Changes" comment="various; messaging etc">
+      <change afterPath="$PROJECT_DIR$/.idea/rSettings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Lists/IWAI2026_Exclude.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/email-list-merger.py" beforeDir="false" afterPath="$PROJECT_DIR$/Lists/list-merger.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/2026/PROCEDURE.md" beforeDir="false" afterPath="$PROJECT_DIR$/2026/PROCEDURE.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/iwai.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/messages/extension_and_anonymization.py" beforeDir="false" afterPath="$PROJECT_DIR$/messages/extension_and_anonymization.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reviewer_selector.py" beforeDir="false" afterPath="$PROJECT_DIR$/reviewer_selector.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,12 +40,15 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Python.IWAI2026_Exclude_Reviewers.executor": "Run",
     "Python.bigmerger.executor": "Run",
     "Python.email-list-merger.executor": "Run",
+    "Python.iwai.executor": "Run",
     "Python.list-merger.executor": "Run",
     "Python.main.executor": "Run",
     "Python.reviewer_selector.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "last_opened_file_path": "/home/adio/prg/python/IWAIopen/Lists"
   }
 }]]></component>
@@ -57,7 +59,7 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+    <configuration name="iwai" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="IWAIopen" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -70,7 +72,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/iwai.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -209,7 +211,15 @@
       <option name="project" value="LOCAL" />
       <updated>1779099738801</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="various; messaging etc">
+      <option name="closed" value="true" />
+      <created>1781001630143</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1781001630143</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -221,7 +231,8 @@
     <MESSAGE value="small update" />
     <MESSAGE value="improve monitor" />
     <MESSAGE value="messaging" />
-    <option name="LAST_COMMIT_MESSAGE" value="messaging" />
+    <MESSAGE value="various; messaging etc" />
+    <option name="LAST_COMMIT_MESSAGE" value="various; messaging etc" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -230,11 +241,6 @@
           <url>file://$PROJECT_DIR$/Lists/bigmerger.py</url>
           <line>76</line>
           <option name="timeStamp" value="26" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/reviewer_selector.py</url>
-          <line>430</line>
-          <option name="timeStamp" value="41" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
