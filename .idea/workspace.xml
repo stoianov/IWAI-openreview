@@ -4,14 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c1d9a590-aa62-421f-af21-68ba5e88f0c0" name="Changes" comment="various; messaging etc">
-      <change afterPath="$PROJECT_DIR$/.idea/rSettings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Lists/IWAI2026_Exclude.py" afterDir="false" />
+    <list default="true" id="c1d9a590-aa62-421f-af21-68ba5e88f0c0" name="Changes" comment="improved reviewer assignment">
+      <change afterPath="$PROJECT_DIR$/ReviewerOptions-on-OpenReview" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/reviewers.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/2026/PROCEDURE.md" beforeDir="false" afterPath="$PROJECT_DIR$/2026/PROCEDURE.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/iwai.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/messages/extension_and_anonymization.py" beforeDir="false" afterPath="$PROJECT_DIR$/messages/extension_and_anonymization.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reviewer_selector.py" beforeDir="false" afterPath="$PROJECT_DIR$/reviewer_selector.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/iwai.py" beforeDir="false" afterPath="$PROJECT_DIR$/iwai.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reviewer_selector.py" beforeDir="false" afterPath="$PROJECT_DIR$/review_assignments.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,16 +45,18 @@
     "Python.iwai.executor": "Run",
     "Python.list-merger.executor": "Run",
     "Python.main.executor": "Run",
-    "Python.reviewer_selector.executor": "Run",
+    "Python.review_assignments.executor": "Run",
+    "Python.reviewer_selector.executor": "Debug",
+    "Python.reviewers.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "/home/adio/prg/python/IWAIopen/Lists"
+    "last_opened_file_path": "/home/adio/prg/python/IWAIopen"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="$PROJECT_DIR$/Lists" />
       <recent name="$PROJECT_DIR$" />
+      <recent name="$PROJECT_DIR$/Lists" />
     </key>
   </component>
   <component name="RunManager">
@@ -219,7 +220,15 @@
       <option name="project" value="LOCAL" />
       <updated>1781001630143</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="improved reviewer assignment">
+      <option name="closed" value="true" />
+      <created>1781198606634</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1781198606634</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -232,7 +241,8 @@
     <MESSAGE value="improve monitor" />
     <MESSAGE value="messaging" />
     <MESSAGE value="various; messaging etc" />
-    <option name="LAST_COMMIT_MESSAGE" value="various; messaging etc" />
+    <MESSAGE value="improved reviewer assignment" />
+    <option name="LAST_COMMIT_MESSAGE" value="improved reviewer assignment" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -241,6 +251,11 @@
           <url>file://$PROJECT_DIR$/Lists/bigmerger.py</url>
           <line>76</line>
           <option name="timeStamp" value="26" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/review_assignments.py</url>
+          <line>609</line>
+          <option name="timeStamp" value="84" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

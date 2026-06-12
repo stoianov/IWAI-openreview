@@ -1,0 +1,234 @@
+{
+    "soundness": {
+        "value": {
+            "param": {
+                "type": "integer",
+                "enum": [
+                    {
+                        "value": 5,
+                        "description": "5: Excellent, technically flawless, with rigorous methodology, sound theoretical foundations, and thorough validation"
+                    },
+                    {
+                        "value": 4,
+                        "description": "4: Good, technically solid with minor issues that do not affect the main conclusions"
+                    },
+                    {
+                        "value": 3,
+                        "description": "3: Fair, technically acceptable but with some methodological weaknesses or gaps in validation"
+                    },
+                    {
+                        "value": 2,
+                        "description": "2: Poor, significant technical flaws or insufficient rigor that weaken the conclusions"
+                    },
+                    {
+                        "value": 1,
+                        "description": "1: Very poor, major technical errors or fundamentally flawed methodology"
+                    }
+                ],
+                "input": "radio"
+            }
+        },
+        "order": 3,
+        "description": "Technical quality and rigor of the work."
+    },
+    "originality": {
+        "value": {
+            "param": {
+                "type": "integer",
+                "enum": [
+                    {
+                        "value": 5,
+                        "description": "5: Excellent, highly novel, introducing groundbreaking ideas, methods, or perspectives"
+                    },
+                    {
+                        "value": 4,
+                        "description": "4: Good, clearly novel contribution that meaningfully extends prior work"
+                    },
+                    {
+                        "value": 3,
+                        "description": "3: Fair, moderately original, with some new ideas combined with existing approaches"
+                    },
+                    {
+                        "value": 2,
+                        "description": "2: Poor, limited novelty, mostly incremental over existing work"
+                    },
+                    {
+                        "value": 1,
+                        "description": "1: Very poor, not original, largely duplicates or trivially modifies prior work"
+                    }
+                ],
+                "input": "radio"
+            }
+        },
+        "order": 4,
+        "description": "Novelty of the work."
+    },
+    "significance": {
+        "value": {
+            "param": {
+                "type": "integer",
+                "enum": [
+                    {
+                        "value": 5,
+                        "description": "5: Excellent, high impact, likely to substantially influence the field or open new research directions"
+                    },
+                    {
+                        "value": 4,
+                        "description": "4: Good, clear impact, results are important and useful to a broad audience"
+                    },
+                    {
+                        "value": 3,
+                        "description": "3: Fair, moderate impact, results are useful but limited in scope or audience"
+                    },
+                    {
+                        "value": 2,
+                        "description": "2: Poor, limited impact, results are unlikely to influence subsequent work"
+                    },
+                    {
+                        "value": 1,
+                        "description": "1: Very poor, no discernible impact or relevance to the field"
+                    }
+                ],
+                "input": "radio"
+            }
+        },
+        "order": 5,
+        "description": "Potential impact of the work."
+    },
+    "pertinence": {
+        "value": {
+            "param": {
+                "type": "integer",
+                "enum": [
+                    {
+                        "value": 5,
+                        "description": "5: Excellent, perfectly aligned with the conference scope and topics of interest"
+                    },
+                    {
+                        "value": 4,
+                        "description": "4: Good, clearly relevant to the conference and of interest to its audience"
+                    },
+                    {
+                        "value": 3,
+                        "description": "3: Fair, reasonably relevant, though somewhat tangential to the core topics"
+                    },
+                    {
+                        "value": 2,
+                        "description": "2: Poor, marginally relevant, would fit better at a different venue"
+                    },
+                    {
+                        "value": 1,
+                        "description": "1: Very poor, not relevant to the conference scope"
+                    }
+                ],
+                "input": "radio"
+            }
+        },
+        "order": 6,
+        "description": "Pertinence to the conference."
+    },
+
+    "presentation": {
+        "value": {
+            "param": {
+                "type": "integer",
+                "enum": [
+                    {
+                        "value": 5,
+                        "description": "5: Excellent, really clear, well-structured, and easy to follow throughout"
+                    },
+                    {
+                        "value": 4,
+                        "description": "4: Good, well-written and clearly organized, with only minor issues"
+                    },
+                    {
+                        "value": 3,
+                        "description": "3: Fair, adequately written but with notable issues in clarity, structure, or polish"
+                    },
+                    {
+                        "value": 2,
+                        "description": "2: Poor, difficult to follow due to unclear writing or poor organization"
+                    },
+                    {
+                        "value": 1,
+                        "description": "1: Very poor, severely unclear or disorganized, hindering understanding"
+                    }
+                ],
+                "input": "radio"
+            }
+        },
+        "order": 7,
+        "description": "Clarity of writing and overall presentation."
+    },
+
+    "rating": {
+        "value": {
+            "param": {
+                "type": "integer",
+                "enum": [
+                    {
+                        "value": 6,
+                        "description": "6: Strong Accept"
+                    },
+                    {
+                        "value": 5,
+                        "description": "5: Accept"
+                    },
+                    {
+                        "value": 4,
+                        "description": "4: Weak Accept"
+                    },
+                    {
+                        "value": 3,
+                        "description": "3: Weak Reject"
+                    },
+                    {
+                        "value": 2,
+                        "description": "2: Reject"
+                    },
+                    {
+                        "value": 1,
+                        "description": "1: Strong Reject"
+                    }
+                ],
+                "input": "select"
+            }
+        },
+        "order": 8,
+        "description": "Overall recommendation."
+    },
+
+    "confidence": {
+      "value": {
+        "param": {
+          "type": "integer",
+          "enum": [
+            {
+              "value": 5,
+              "description": "5: Absolutely certain"
+            },
+            {
+              "value": 4,
+              "description": "4: Very confident"
+            },
+            {
+              "value": 3,
+              "description": "3: Reasonably confident"
+            },
+            {
+              "value": 2,
+              "description": "2: Somewhat uncertain"
+            },
+            {
+              "value": 1,
+              "description": "1: Very uncertain"
+            }
+          ],
+          "input": "radio"
+        }
+      },
+      "order": 9,
+      "description": "How confident are you in this assessment?"
+    }
+
+}

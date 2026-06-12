@@ -28,6 +28,14 @@ types=['1-paper','2-abstr']
 
 submissions = client.get_all_notes(invitation=SUBMISSION_INVITATION, sort='number:asc', details='replies')
 
+def extract_field(content, key):
+    """  OpenReview V2 stores values as:  content[key]["value"] or content[key]  """
+    if key not in content:  return None
+    value = content[key]
+    if isinstance(value, dict) and "value" in value:
+        return value["value"]
+    return value
+
 def authors(print_list=False):
     """ get all unique author IDs and either print the list or just return it """
     author_ids = set()
@@ -235,7 +243,6 @@ def add_reviewers(reviewer_ids):
     client.post_group_edit( invitation=f"{venue_id}/-/Edit", readers=[venue_id], writers=[venue_id], signatures=[venue_id], group=group)
     print(f"Reviewers group updated: {len(members)} -> {len(new_members)} members.")
 
-
 def X_lossy_reviewers1():
     logs=client.get_process_logs(venue_id)
     for l in logs:
@@ -293,42 +300,7 @@ def compute_CoI():
         time.sleep(10)
     conflicts = client.get_expertise_results(job_id=job_id)
 
-def extract_field(content, key):
-    """  OpenReview V2 stores values as:  content[key]["value"] or content[key]  """
-    if key not in content:  return None
-    value = content[key]
-    if isinstance(value, dict) and "value" in value:
-        return value["value"]
-    return value
 
-def get_CoI():
-    global paper_conflicts; paper_conflicts = {}
-    """https://docs.openreview.net/how-to-guides/data-retrieval-and-modification/how-to-get-edges-for-conflicts-assignments-custom-max-papers-and-more"""
-    conflict_invitation = f"{venue_id}/Reviewers/-/Conflict"
-    grouped_edges = client.get_grouped_edges(invitation=conflict_invitation, groupby='head')
-    for group in grouped_edges:
-        paper_id = group['id']['head']
-        reviewers = { edge['tail'] if isinstance(edge,dict) else edge.tail for edge in group['values']}
-        paper_conflicts[paper_id]=reviewers
-
-    rows=[]
-    for note in submissions:
-        title = extract_field(note.content, "title")
-        authors = extract_field(note.content, "authors")
-        number = note.number
-        id     = note.id
-        cois   = paper_conflicts.get(id,set())
-        rows.append({
-            "paper_id": id,
-            "paper_number": number,
-            "title": title,
-            "authors": ", ".join(authors),
-            "CoIs": ", ".join(sorted(cois)) if cois else ""
-        })
-    df = pd.DataFrame(rows)
-    fname=f"{VENUE}_OpenReview_CoI.xlsx"
-    df.to_excel(fname, index=False)
-    print(f"Exported {len(df)} papers to '{fname}'.")
 
 def all_invitaions():
     invitations = client.get_invitations(prefix=venue_id)
@@ -339,8 +311,8 @@ def all_invitaions():
 if __name__ == '__main__':
     # -- IWAI submissions INFORMATION --
     # authors_by_type(2)  # List all author's IDs or emails.
-    #monitor()               # List all submissions (type,title,autor-IDs, keywords)
-    #submissions2xls()
+    monitor()               # List all submissions (type,title,autor-IDs, keywords)
+    submissions2xls()
     #download_pdf()  # Download submissions and store them in directories by type
 
     # ---------  MESSAGING  -----------
@@ -358,6 +330,6 @@ if __name__ == '__main__':
     #add_reviewers(authors())    # Add all authors as potential reviewers
     #authors(print_list=True)
     # lossy_reviewers()
-    get_CoI()
+    #get_CoI()
     #all_invitaions()
 

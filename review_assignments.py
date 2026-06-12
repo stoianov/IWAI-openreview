@@ -27,6 +27,12 @@ YEAR = '2026'
 VENUE = f'IWAI-{YEAR}'
 venue_id = f'IWAI/{YEAR}/Workshop'
 SUBMISSION_INVITATION = f'{venue_id}/-/Submission'
+ASSIGNMENT_INVITATION = f'{venue_id}/Reviewers/-/Assignment'
+
+COI_INVITATION = f"{venue_id}/Reviewers/-/Conflict"
+
+REVIEWER_GROUP = f'{venue_id}/Reviewers'
+
 
 TOP_K_CANDIDATES = 35
 DEFAULT_REVIEW_LOAD = 2
@@ -65,6 +71,47 @@ def extract_field(content, key):
     if isinstance(value, dict) and "value" in value:
         return value["value"]
     return value
+
+def set_all_authors_as_reviewers():
+    authors = set()
+    for paper in submissions:
+        ids = extract_field(paper.content, 'authorids')
+        for a_id in ids:
+            if a_id not in (None, "", 'None'):
+                authors.add(a_id)
+    group = client.get_group(REVIEWER_GROUP)
+    old_members = set(group.members)
+    group.members = sorted(authors)
+    client.post_group_edit( invitation=f"{venue_id}/-/Edit", readers=[venue_id], writers=[venue_id], signatures=[venue_id], group=group)
+    print(f"Reviewers group updated: {len(old_members)} -> {len(authors)} members.")
+
+def get_CoI():
+    global paper_conflicts; paper_conflicts = {}
+    """https://docs.openreview.net/how-to-guides/data-retrieval-and-modification/how-to-get-edges-for-conflicts-assignments-custom-max-papers-and-more"""
+    grouped_edges = client.get_grouped_edges(invitation=COI_INVITATION, groupby='head')
+    for group in grouped_edges:
+        paper_id = group['id']['head']
+        reviewers = { edge['tail'] if isinstance(edge,dict) else edge.tail for edge in group['values']}
+        paper_conflicts[paper_id]=reviewers
+
+    rows=[]
+    for note in submissions:
+        title = extract_field(note.content, "title")
+        authors = extract_field(note.content, "authors")
+        number = note.number
+        id     = note.id
+        cois   = paper_conflicts.get(id,set())
+        rows.append({
+            "paper_id": id,
+            "paper_number": number,
+            "title": title,
+            "authors": ", ".join(authors),
+            "CoIs": ", ".join(sorted(cois)) if cois else ""
+        })
+    df = pd.DataFrame(rows)
+    fname=f"{VENUE}_CoI_from_OpenReview.xlsx"
+    df.to_excel(fname, index=False)
+    print(f"Exported {len(df)} papers to '{fname}'.")
 
 def get_submissions():
     global papers
@@ -297,7 +344,6 @@ def assignment(paper_to_candidates):
     loads = np.array(loads)
     print(f"Reviewer Load: Min/Mean/Max load: {loads.min()} / {loads.mean():.2f} / {loads.max()}")
 
-
 def assignment2(paper_to_candidates):
     print("\nComputing final assignments ...")
     assignments = []
@@ -371,7 +417,6 @@ def assignment2(paper_to_candidates):
     loads = np.array(loads)
     print(f"Reviewer Load: Min/Mean/Max load: {loads.min()} / {loads.mean():.2f} / {loads.max()}")
 
-
 def assignment3(paper_to_candidates):
     print("\nComputing final assignments ...")
     assignments = []
@@ -427,12 +472,12 @@ def assignment3(paper_to_candidates):
         paper=paper_dic[paper_id]
         reviewer_submissions = [ p["title"]  for p in papers if rid in p["authorids"] ]
         assignments.append({
-            "pap_type":         paper["paper_type"],
-            "pap_stream":       paper["stream"],
             "pap_number":       paper["number"],
             "pap_id":           paper_id,
             "pap_title":        paper["title"],
             "pap_authors":      "; ".join(paper["authors"]),
+            "pap_type":         paper["paper_type"],
+            "pap_stream":       paper["stream"],
             "rev_id":           rid,
             "score":            round(float(item["score"]), 2),
             "rev_role":         item["role"],
@@ -444,7 +489,7 @@ def assignment3(paper_to_candidates):
         })
 
     assignments_df = pd.DataFrame(assignments)
-    fname3=f"{VENUE}_final_assignment3orcoi.xlsx"
+    fname3=f"{VENUE}_final_assignment3.xlsx"
     assignments_df.to_excel(fname3, index=False)
     print(f"\nSaved to {fname3}")
 
@@ -527,7 +572,6 @@ def build_CoI_database():
                 institutions.update(reviewer_institutions[author])
         paper_author_institutions[paper["paper_id"]] = institutions
 
-
 def get_CoI_from_OpenReview():
     global paper_conflicts; paper_conflicts = {}
     """https://docs.openreview.net/how-to-guides/data-retrieval-and-modification/how-to-get-edges-for-conflicts-assignments-custom-max-papers-and-more"""
@@ -539,8 +583,7 @@ def get_CoI_from_OpenReview():
         paper_conflicts[paper_id]=reviewers
     pass
 
-
-if __name__ == '__main__':
+def compute_assignments():
     get_submissions()
     extract_reviewers()
     get_profiles()
@@ -551,10 +594,80 @@ if __name__ == '__main__':
     assignment3(paper_to_candidates)
     print("\nDone.")
 
+def upload_assignments():
+    fname=f"{VENUE}-assignments.xlsx"
+    df = pd.read_excel(fname)
+    grouped = df.groupby("pap_id")
+
+    for paper_id, group in grouped:
+        # Head filter + Delete previous assignments
+        # config = client.get_edges(invitation='IWAI/2026/Workshop/-/Assignment_Configuration', head=paper_id)
+        # if config:
+        #     print(config)
+        existing = client.get_edges(invitation=ASSIGNMENT_INVITATION, head=paper_id)
+        if existing:
+            print(existing)
+            client.delete_edges(invitation=ASSIGNMENT_INVITATION, head=paper_id, soft_delete=False)
+
+        paper_number = group["pap_number"].iloc[0]
+        paper_reviewers_group_id = f"{venue_id}/Submission{paper_number}/Reviewers"
+        paper_authors_group_id = f"{venue_id}/Submission{paper_number}/Authors"
+
+        # Rebuild assignments per paper_id
+        edges = []
+        reviewers_to_add = []
+
+        for _, row in group.iterrows():
+            reviewer_id=row["rev_id"]
+            reviewers_to_add.append(reviewer_id)
+            #edge_id = f"{paper_id}-{reviewer_id}"
+            edges.append(
+                openreview.api.Edge(invitation=ASSIGNMENT_INVITATION,
+                    head=paper_id, tail=reviewer_id, weight=1,
+                    readers=[venue_id, paper_reviewers_group_id, reviewer_id],  #nonreaders=paper_authors_group_id,
+                    writers=[venue_id],
+                    signatures=[venue_id] )
+            )
+        client.add_members_to_group(group=paper_reviewers_group_id, members=reviewers_to_add)
+        openreview.tools.post_bulk_edges(client=client, edges=edges)
+
+    print(f"Successfully deleted previous assignments and uploaded {len(df)} assignments of {len(grouped)} papers")
+
+
+def check1():
+    invitations = client.get_invitations(prefix='IWAI/2026/Workshop/Submission31')
+    for inv in invitations:
+        print(inv.id, inv.invitees)
+
+    members = client.get_group('IWAI/2026/Workshop/Submission31/Reviewers').members
+    print(members)
+
+def check2():
+    edges = client.get_all_edges(invitation = ASSIGNMENT_INVITATION, tail = " ~Ivilin_Peev_Stoianov1") #head = 'zqV2uduW5y'
+    print(edges)
+
+# https://api2.openreview.net/edges/count?invitation=IWAI/2026/Workshop/Reviewers/-/Assignment
+
+def check3():
+    proposed_assignment_invitation_id = client.get_assignment_id(committee_id = REVIEWER_GROUP, deployed = False)
+    print(proposed_assignment_invitation_id)
+
+if __name__ == '__main__':
+    # 1. Set reviewers
+    # set_all_authors_as_reviewers()
+    # 2. GUI -> Compute Paper Matching (with Comprehensive Conflict computation and Specter2+SciIncl; takes 10-15 min)
+    # 2a (optional): Export Conflict-of-Interest
+    # get_CoI()
+    # 3. Compute assignments (takes 5 min)
+    # compute_assignments()
+    # 4. Upload assignments
+    upload_assignments()
+    #check3()
+
+
 # TO DO
 # + add all authors as reviewers
 # x verify institution
 # + verify CoI from openreview
-
 # ADD Assignments to openreview
 # - do it first for a test list and check when assignments become visible and active

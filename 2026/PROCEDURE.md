@@ -10,6 +10,7 @@ Timeline relative to begining of process / -venue date)
 - essentially copy-past the request from the previous year
 - attention to set correct days and emails of chairs
 - abstract registration deadline is 2 weeks before submission deadline
+- NOTE: Select NO for "Submission Deadline Author Reorder" to allow authors to insert authors
 
 ## Communication to authors of previous years submissions
 - extract authors (python); join lists;
@@ -36,7 +37,7 @@ Populate it automatically with either
     get_submissions()
     extract_reviewers()
     save the string REVIEWERS=[....] into a file in directory Lists. Then import it and run add_reviewers(REVIEWERS)
-- OR all authors potential reviewers: add_revuewers(authors())
+- OR all authors potential reviewers: add_reviewers(authors())
 
 extract_reviewers() gets the 1st, 2nd, and last (senior) author as reviewers. 
 In case it is needed, pen-ultimate could be used as another senior reviewer. (update the script)
@@ -71,3 +72,13 @@ IWAI/2026/Workshop/Reviewers/-/Review_Count
 IWAI/2026/Workshop/Reviewers/-/Review_Days_Late_Sum
 IWAI/2026/Workshop/Reviewers/-/Submission_Group
 IWAI/2026/Workshop/Reviewers/-/Submission_Message
+
+### Final Full-Paper Reviewer assignment procedure to be done after Submission deadline
+ ----------
+1. iwai.py -> set_all_authors_as_reviewers()
+2. GUI -> Compute Paper Matching (with Comprehensive Conflict computation and Specter2+SciIncl; this takes 10-15 min)
+3. reviewer_selector.py (with assignment3; overall this takes 5 min)
+4. Check IWAI2026_final_assignment3orcoi.xlsx"
+5. Upload the assignments
+ ----------
+
