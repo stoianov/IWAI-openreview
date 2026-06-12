@@ -4,13 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c1d9a590-aa62-421f-af21-68ba5e88f0c0" name="Changes" comment="improved reviewer assignment">
-      <change afterPath="$PROJECT_DIR$/ReviewerOptions-on-OpenReview" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/reviewers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/2026/PROCEDURE.md" beforeDir="false" afterPath="$PROJECT_DIR$/2026/PROCEDURE.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/iwai.py" beforeDir="false" afterPath="$PROJECT_DIR$/iwai.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/reviewer_selector.py" beforeDir="false" afterPath="$PROJECT_DIR$/review_assignments.py" afterDir="false" />
+    <list default="true" id="c1d9a590-aa62-421f-af21-68ba5e88f0c0" name="Changes" comment="reviewer assignment uploads">
+      <change beforePath="$PROJECT_DIR$/review_assignments.py" beforeDir="false" afterPath="$PROJECT_DIR$/review_assignments.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -228,7 +223,15 @@
       <option name="project" value="LOCAL" />
       <updated>1781198606634</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="reviewer assignment uploads">
+      <option name="closed" value="true" />
+      <created>1781266989229</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1781266989230</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -242,7 +245,8 @@
     <MESSAGE value="messaging" />
     <MESSAGE value="various; messaging etc" />
     <MESSAGE value="improved reviewer assignment" />
-    <option name="LAST_COMMIT_MESSAGE" value="improved reviewer assignment" />
+    <MESSAGE value="reviewer assignment uploads" />
+    <option name="LAST_COMMIT_MESSAGE" value="reviewer assignment uploads" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -256,6 +260,11 @@
           <url>file://$PROJECT_DIR$/review_assignments.py</url>
           <line>609</line>
           <option name="timeStamp" value="84" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/review_assignments.py</url>
+          <line>660</line>
+          <option name="timeStamp" value="85" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

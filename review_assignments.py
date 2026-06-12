@@ -652,6 +652,17 @@ def check3():
     proposed_assignment_invitation_id = client.get_assignment_id(committee_id = REVIEWER_GROUP, deployed = False)
     print(proposed_assignment_invitation_id)
 
+def check_assignments():
+    fname = f"{VENUE}-assignments.xlsx"
+    df = pd.read_excel(fname)
+    grouped = df.groupby("pap_id")
+
+    for paper_id, group in grouped:
+        existing = client.get_edges(invitation=ASSIGNMENT_INVITATION, head=paper_id)
+        if existing:
+            print(existing)
+
+
 if __name__ == '__main__':
     # 1. Set reviewers
     # set_all_authors_as_reviewers()
@@ -661,8 +672,9 @@ if __name__ == '__main__':
     # 3. Compute assignments (takes 5 min)
     # compute_assignments()
     # 4. Upload assignments
-    upload_assignments()
+    #upload_assignments()
     #check3()
+    check_assignments()
 
 
 # TO DO
