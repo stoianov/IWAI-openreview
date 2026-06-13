@@ -113,7 +113,7 @@ def submissions2xls():
         stream = streams[strm]
         authors = s.content.get("authors",[])["value"]
         if isinstance(authors,list): authors=", ".join(authors)
-        has_pdf= "yes" if s.content.get("pdf") else "no"
+        has_pdf= "+" if s.content.get("pdf") else ""
         kwd = s.content['keywords']['value']
 
         data[typ].append({
@@ -302,6 +302,43 @@ def compute_CoI():
 
 
 
+
+def reminder_to_submit():
+
+    SBJ = f"URGENT: IWAI-2026 -- Please Complete Your Submission"
+    MSG = """Dear Authors,
+
+    You pre-registered an abstract for IWAI-2026 (Madrid), but you did not complete your Submission before the deadline.
+    
+    If you still intend to submit your contribution, please,  let us know as soon as possible whether you would need 
+    a short extension, ideally allowing you to complete the submission by today, 13 June, 20:00 GMT.
+
+    Exceptionally, we may be able to grant additional time, but under no circumstances beyond Monday, 9:00 GMT.
+    
+    If you do not intend to complete the submission, we kindly ask you to withdraw your registered abstract. 
+
+    With very best regards,
+    The IWAI 2026 Organizing Committee
+    """
+
+    for s in submissions:
+        p_pdf = extract_field(s.content,'pdf')
+        p_tit = extract_field(s.content,'title')
+        p_num = s.number
+        p_aid = extract_field(s.content, 'authorids')
+        p_typ = extract_field(s.content,'type')
+        ptype_int=int(p_typ[0])-1
+        pType = types[ptype_int]
+        if not p_pdf:
+            print(f"{p_num}-{pType} - {p_tit} - {p_aid}")
+            # for a_id in p_aid:
+            #     if a_id not in (None, "", 'None'):
+            #         write_to(TO=a_id, SBJ=SBJ, MSG=MSG)
+            #         time.sleep(0.3)
+
+
+
+
 def all_invitaions():
     invitations = client.get_invitations(prefix=venue_id)
     for inv in invitations:
@@ -311,9 +348,9 @@ def all_invitaions():
 if __name__ == '__main__':
     # -- IWAI submissions INFORMATION --
     # authors_by_type(2)  # List all author's IDs or emails.
-    monitor()               # List all submissions (type,title,autor-IDs, keywords)
+    #monitor()               # List all submissions (type,title,autor-IDs, keywords)
     submissions2xls()
-    #download_pdf()  # Download submissions and store them in directories by type
+    download_pdf()  # Download submissions and store them in directories by type
 
     # ---------  MESSAGING  -----------
     #write_to_myself()
@@ -332,4 +369,6 @@ if __name__ == '__main__':
     # lossy_reviewers()
     #get_CoI()
     #all_invitaions()
+
+    reminder_to_submit()
 
