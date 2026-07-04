@@ -77,7 +77,7 @@ IWAI/2026/Workshop/Reviewers/-/Submission_Message
  ----------
 1. iwai.py -> set_all_authors_as_reviewers()
 2. GUI -> Compute Paper Matching (with Comprehensive Conflict computation and Specter2+SciIncl; this takes 10-15 min)
-3. reviewer_selector.py (with assignment3; overall this takes 5 min)
+3. review_assignments.py (with assignment3; overall this takes 5 min)
 4. Check IWAI2026_final_assignment3orcoi.xlsx"
 5. Upload the assignments
  ----------
