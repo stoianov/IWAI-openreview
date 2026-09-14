@@ -5,10 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c1d9a590-aa62-421f-af21-68ba5e88f0c0" name="Changes" comment="reviewer assignment uploads">
-      <change afterPath="$PROJECT_DIR$/TO_DO.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/cameraready.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/IWAI-2026-assignments.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/IWAI-2026-assignments.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TO_DO.py" beforeDir="false" afterPath="$PROJECT_DIR$/TO_DO.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/iwai.py" beforeDir="false" afterPath="$PROJECT_DIR$/iwai.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/reviewers.py" beforeDir="false" afterPath="$PROJECT_DIR$/reviewers.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,13 +39,17 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Python tests.Python tests in review_assignments.py.executor": "Run",
     "Python.IWAI2026_Exclude_Reviewers.executor": "Run",
     "Python.bigmerger.executor": "Run",
+    "Python.cameraready.executor": "Run",
     "Python.email-list-merger.executor": "Run",
+    "Python.extended_abstract_tests_2026.executor": "Run",
     "Python.iwai.executor": "Run",
     "Python.list-merger.executor": "Run",
     "Python.main.executor": "Run",
     "Python.review_assignments.executor": "Run",
+    "Python.review_guidelines.executor": "Run",
     "Python.reviewer_selector.executor": "Debug",
     "Python.reviewers.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
@@ -242,7 +248,15 @@
       <option name="project" value="LOCAL" />
       <updated>1781269225303</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="reviewer assignment uploads">
+      <option name="closed" value="true" />
+      <created>1781346814218</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1781346814218</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -269,13 +283,23 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/review_assignments.py</url>
-          <line>609</line>
-          <option name="timeStamp" value="84" />
+          <line>129</line>
+          <option name="timeStamp" value="97" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/review_assignments.py</url>
-          <line>660</line>
-          <option name="timeStamp" value="85" />
+          <line>82</line>
+          <option name="timeStamp" value="104" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/review_assignments.py</url>
+          <line>879</line>
+          <option name="timeStamp" value="122" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/review_assignments.py</url>
+          <line>844</line>
+          <option name="timeStamp" value="130" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

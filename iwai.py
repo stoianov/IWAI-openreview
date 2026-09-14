@@ -9,6 +9,7 @@ import pprint
 BASE_URL = 'https://api2.openreview.net'
 YEAR='2026'
 VENUE = f'IWAI-{YEAR}'
+VENUE2 = f'IWAI {YEAR}'
 venue_id    = f'IWAI/{YEAR}/Workshop'
 SUBMISSION_INVITATION = f'{venue_id}/-/Submission'
 BL_SUBMISSION_INVITATION = f'{venue_id}/-/Blind_Submission'
@@ -345,12 +346,77 @@ def all_invitaions():
         if "Reviewer" in inv.id or "Conflict" in inv.id:
             print(inv.id)
 
+def decisions2csv():
+    decision_map = {
+        "A+P": "Accept (Proceedings Paper + Oral Presentation)",
+        "A+sp": "Accept (Proceedings Paper + Poster + Spotlight Presentation)",
+        "P+sp": "Accept (Poster + Spotlight Presentation)",
+        "P": "Accept (Poster)",
+        "R": "Reject"}
+    DecisionXLS=f'{VENUE}-Reviews-Decisions.xlsx'
+    df = pd.read_excel(DecisionXLS, sheet_name="ALL")
+    df["OpenReviewDecision"] = df["DECISION"].map(decision_map)
+    df["Comment"] = "" # Empty column
+
+
+    df[["Numb", "OpenReviewDecision", "Comment"]].to_csv(
+        f'{VENUE}-OpenReviewDecisions.csv',index=False,header=False)
+
+def clarification_letter(dry_run=True):
+    sent=0
+    for paper in submissions:
+        paper_id = paper.number
+        tit = extract_field(paper.content, "title")
+        ids = extract_field(paper.content, 'authorids')
+        typ = int(extract_field(paper.content, "type")[0])
+        if typ==1: # Full paper
+            FirstLastAuthors=[ids[0]]
+            if len(ids)>1: FirstLastAuthors.append(ids[-1])
+            for reply in paper.details["replies"]:
+                for invitation in reply["invitations"]:
+                    if invitation.endswith("Decision"):
+                        decision = reply["content"]["decision"]["value"]
+                        if "Accept (Poster" in decision:
+                            print(f"{paper_id}; {typ}; {decision}; {FirstLastAuthors}; {tit}")
+                            for author in FirstLastAuthors:
+                                name = author[1:-1].split("_")[0]
+                                subject = f"{VENUE}, decision clarification"
+                                message = f"""Dear {name},
+
+    We would like to clarify that the decision "{decision}" for your full-paper submission "{tit}" means that your submission has been accepted for presentation at {VENUE2}, but not for publication in the {VENUE2} proceedings.
+
+    Thank you for your participation in {VENUE2}. 
+    
+    We look forward to seeing you in Madrid.
+
+    Best regards,
+    
+    The {VENUE} Program Chairs
+    """
+
+                                if dry_run:
+                                    print("=" * 70);
+                                    print(author);
+                                    print(subject);
+                                    print(message)
+                                else:
+                                    print(f"Submitting TO {author} SBJ={subject}")
+                                    client.post_message(subject=subject, message=message, recipients=[author],
+                                                        signature=c.usr, replyTo="ivilinpeev.stoianov@cnr.it", invitation=MSG_INVITATION, )
+                                    time.sleep(0.3)
+                                    sent += 1
+
+    if not dry_run: print(f"Sent {sent} reminder messages.")
+
+
+
 if __name__ == '__main__':
     # -- IWAI submissions INFORMATION --
-    # authors_by_type(2)  # List all author's IDs or emails.
+    #authors(True)
+    #authors_by_type(2)  # List all author's IDs or emails.
     #monitor()               # List all submissions (type,title,autor-IDs, keywords)
-    submissions2xls()
-    download_pdf()  # Download submissions and store them in directories by type
+    #submissions2xls()
+    #download_pdf()  # Download submissions and store them in directories by type
 
     # ---------  MESSAGING  -----------
     #write_to_myself()
@@ -370,5 +436,7 @@ if __name__ == '__main__':
     #get_CoI()
     #all_invitaions()
 
-    reminder_to_submit()
+    #reminder_to_submit()
+    # decisions2csv()
+    clarification_letter(dry_run=False)
 
