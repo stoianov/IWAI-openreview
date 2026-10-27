@@ -16,8 +16,6 @@ Instructions:
 
 ## Scripts:
 
-
-
 ### iwai.py
 This is the main code. List submissions, monitor, etc
 

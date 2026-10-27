@@ -409,6 +409,97 @@ def clarification_letter(dry_run=True):
     if not dry_run: print(f"Sent {sent} reminder messages.")
 
 
+def presentations_letter(dry_run=True):
+    sent = 0
+    for paper in submissions:
+        paper_id = paper.number
+        tit = extract_field(paper.content, "title")
+        AuthIDS = extract_field(paper.content, 'authorids')
+        typ = int(extract_field(paper.content, "type")[0])
+        for reply in paper.details["replies"]:
+            for invitation in reply["invitations"]:
+                if invitation.endswith("Decision"):
+                    decision = reply["content"]["decision"]["value"]
+                    is_poster =  "Poster" in decision
+                    is_spotlight = "Spotlight" in decision
+                    is_presentation = "Oral" in decision
+                    if is_poster or is_presentation:
+                        print(f"{paper_id}; {typ}; {decision}; {AuthIDS[0]}; {tit}")
+                        for author in AuthIDS:
+                            MSG1,MSG2="","" # default null
+                            name = author[1:-1].split("_")[0]
+                            subject = f"{VENUE}: Presentation of Submission {paper_id}"
+                            Disclaimer = """
+The following instructions are for the presenting author.
+"""
+
+                            Opening = f"""
+Dear {name},
+
+We thank you for your valuable contribution "{tit}" (Submission ID {paper_id}) to {VENUE2}. The Chair's Decision was: {decision}.
+
+You can now consult the detailed {VENUE2} schedule here: https://iwaiworkshop.github.io/docs/IWAI_2026_program_detailed.pdf
+{Disclaimer if len(AuthIDS)>1 else ""}"""
+                            if is_spotlight:
+                                MSG1 = f"""
+Spotlight presentations should be prepared in MS PowerPoint (PPTX) format (3 minutes, 4 slides). 
+To maintain the tight Spotlight session schedule, the presentations will be run from an onsite computer.
+
+Please upload your PPTX presentation to OpenReview from your Submission page, by following Edit -> Revision and Presentation. As a backup, please also upload a PDF version of the presentation. 
+
+For an effective 3-minute Spotlight, we recommend keeping the slides clear and focused on the main contribution and results. 
+Prefer figures and diagrams over dense text, and use large, easily readable fonts. 
+Please keep in mind that you have only 3 minutes, so the presentation should be concise and easy to follow.
+
+Mind that there will be a **Best Spotlight Award** for the presentation that most effectively communicates the main idea within the 3-minute format.
+
+If you don't have access to MS PowerPoint, you could use Google Presentations to create the presentation and export it as a PowerPoint PPTX file and PDF. 
+Please make sure that the presentation does not require an Internet connection to run.
+It is recommended that you verify how the exported file appears when run in MS PowerPoint, especially multimedia and animation content.
+
+We recommend uploading your presentation by October 8. Uploaded presentations can be updated at any time.
+"""
+
+                            if is_presentation:
+                                MSG1 = """
+Your 12-minute oral presentation may be given from your own laptop. This will be followed by a 3-minute Q&A.
+
+If needed, the presentation can instead be run from an onsite computer. 
+In this case, please upload your presentation to OpenReview in PowerPoint (PPTX) or PDF format. From your Submission page, follow Edit -> Revision and Presentation. 
+
+As a backup, we recommend uploading at least a PDF version of your presentation to OpenReview.
+"""
+
+                            if is_poster:
+                                MSG2 = """
+Please bring your poster printed in A0 format and hang it on an available poster board on the day of your poster session.
+"""
+
+                            Closure = f"""
+If you are no longer available to present your work, please feel free to disregard these instructions.
+
+We look forward to welcoming you to Madrid and building an even stronger IWAI community.
+
+Kind regards,
+The {VENUE2} Program Committee
+"""
+                            message = Opening + MSG1 + MSG2 + Closure
+                            if dry_run:
+                                print("=" * 70);
+                                print(author)
+                                print(subject)
+                                print(message)
+                                sent += 1
+                            else:
+                                print(f"[{sent}] Submitting TO {author} SBJ={subject}")
+                                client.post_message(subject=subject, message=message, recipients=[author],
+                                                    signature=c.usr, replyTo="ivilinpeev.stoianov@cnr.it",
+                                                    invitation=MSG_INVITATION, )
+                                time.sleep(0.3)
+                                sent += 1
+
+    if not dry_run: print(f"Sent {sent} messages.")
+    if dry_run: print(f"Checked {sent} messages.")
 
 if __name__ == '__main__':
     # -- IWAI submissions INFORMATION --
@@ -438,5 +529,6 @@ if __name__ == '__main__':
 
     #reminder_to_submit()
     # decisions2csv()
-    clarification_letter(dry_run=False)
-
+    #clarification_letter(dry_run=True)
+    #presentations_letter(dry_run=True)
+    pass
