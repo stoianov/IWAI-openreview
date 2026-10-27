@@ -2,22 +2,22 @@
 
 ### Author: Ivilin Stoianov
 
-This is an official repository of python code used to access the submissions to the IWAI conference. 
+An official repository of python code used to access IWAI @ openreview. 
 
 Its purpose is to support the Organization Committee in handling the submission and reviewing processes.
 
-v0: 15 May 2026 (authors, monitor, submissions2xls, pdf's)
-v1,2,3 ..
+v1 15 May 2026 (authors, monitor, submissions2xls, pdf's)
+regular updates with functionalities
 
 Instructions:
-- set the *config.py* with your openreview account info. Be careful not to share your access information ..
-- install **openreview** library (e.g. with pip)
-- uncomment function to be executed
+- set *config.py* with your openreview account info. Be careful not to share your access information ..
+- install the **openreview** library
+- uncomment functions to be executed
 
 ## Scripts:
 
 ### iwai.py
-This is the main code. List submissions, monitor, etc
+The main code. List submissions, monitor, etc
 
     - authors()
 List all author's IDs or emails.
