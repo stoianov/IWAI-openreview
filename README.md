@@ -1,6 +1,6 @@
 # IWAI OpenReview python code
 
-### Author: Ivilin Stoianov
+Author: Ivilin Stoianov
 
 An official repository of python code used to access IWAI @ openreview. 
 
